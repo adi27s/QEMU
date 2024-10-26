@@ -1,0 +1,54 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Installation <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+sudo apt install qemu
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Create a virtual image <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+qemu-img create -f qcow2 <Image-name>.img 10G
+
+-f : sets the format to cow2
+-cow2 : copy on write
+- <Image-name> is the final image of size 10G
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Launch the VM <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+qemu-system-<arch> -enable-kvm -cdrom <ISO-file>.iso -boot menu=on -drive file=<Image-name>.img -m 2G
+(Select DVD/CD menu)
+
+-arch : supported architectures
+        x86_64 - qemu-system-x86_64: 64-bit x86 systems
+        i386 - qemu-system-i386: 32-bit x86 systems
+        aarch64 - qemu-system-aarch64: 64-bit ARM systems
+        arm - qemu-system-arm: 32-bit ARM systems
+        ppc - qemu-system-ppc: PowerPC systems
+        ppc64 - qemu-system-ppc64: 64-bit PowerPC systems
+        mips - qemu-system-mips: MIPS architecture
+        riscv32 - qemu-system-riscv32: 32-bit RISC-V architecture
+        riscv64 - qemu-system-riscv64: 64-bit RISC-V architecture
+        s390x - qemu-system-s390x: IBM System/390 (mainframe) architecture
+
+        To install it 
+        sudo apt install qemu-system-arm
+
+-enable-kvm : Kernel-based Virtual Machine allows the kernel to act as a hypervisor (aka VMM - Virtual Machine Monitor - a HW/SW that allows multiple OSs to run on same HW).
+              Provides the ability to run multiple isolated VMs.
+-cdrom : loads an iso
+-boot : menu will appear on start up
+-drive : where the OS will be loaded
+-m : size
+
+>>>>>>>>>>>>>>>>>>>>>>>> Post OS Installation on the Disk <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+qemu-system-<arch> -enable-kvm -boot menu=on -drive file=<Image-name>.img -m 2G
+(Select HardDisk)
+(No boot flag required)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Shortcuts <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Mouse/Exit Full Screen - Ctrl+Alt+G 
+Full Screen - Ctrl+Alt+F
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Make it FASTER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+qemu-system-<arch> -enable-kvm -cdrom <ISO-file>.iso -boot menu=on -drive file=<Image-name>.img -m 2G -cpu host
+(Now it uses the same CPU)
+
+qemu-system-<arch> -enable-kvm -cdrom <ISO-file>.iso -boot menu=on -drive file=<Image-name>.img -m 2G -cpu host -smp 2
+(Now it uses more cores)
+
+qemu-system-<arch> -enable-kvm -cdrom <ISO-file>.iso -boot menu=on -drive file=<Image-name>.img -m 2G -cpu host -vga virtio -display sdl,gl=on
+(Better graphics)
